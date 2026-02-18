@@ -27,11 +27,131 @@
     body {
       font-family: var(--font-body);
       color: #eee;
-      background: var(--black);
+      background: #050505;
+      min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+    }
+    #root {
       height: 100vh;
       display: flex;
       flex-direction: column;
-      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ========== VIDEO HERO SECTION ========== */
+    .video-hero {
+      background: #050505;
+      padding: 0 2rem 3rem;
+      text-align: center;
+    }
+    .video-hero-nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.25rem 2rem;
+      background: linear-gradient(to bottom, rgba(0,0,0,0.85) 0%, transparent 100%);
+    }
+    .video-hero-nav a {
+      font-family: var(--font-body);
+      font-size: 1.05rem;
+      color: #A09880;
+      text-decoration: none;
+      transition: color 0.3s;
+    }
+    .video-hero-nav a:hover { color: var(--gold); }
+    .video-hero-nav .nav-brand {
+      font-family: var(--font-heading);
+      font-weight: 600;
+      font-size: 1.3rem;
+      color: #F0EBE0;
+      text-decoration: none;
+    }
+    .video-hero h1 {
+      font-family: var(--font-heading);
+      font-weight: 700;
+      font-size: clamp(1.8rem, 4vw, 2.8rem);
+      color: #F0EBE0;
+      margin-bottom: 0.75rem;
+      letter-spacing: 0.05em;
+    }
+    .video-hero .intro-line {
+      font-family: var(--font-body);
+      font-style: italic;
+      font-size: clamp(1rem, 2vw, 1.2rem);
+      color: #A09880;
+      margin-bottom: 2rem;
+    }
+    .video-container {
+      position: relative;
+      width: clamp(320px, 70vw, 720px);
+      margin: 0 auto;
+      aspect-ratio: 16 / 9;
+      background: #0C0B0A;
+      border-radius: 8px;
+      overflow: hidden;
+      border: 1px solid rgba(201, 151, 44, 0.15);
+      box-shadow: 0 8px 32px rgba(0,0,0,0.6);
+    }
+    .video-container video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    .video-overlay {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: rgba(0,0,0,0.5);
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    .video-overlay:hover { background: rgba(0,0,0,0.35); }
+    .video-overlay.hidden { display: none; }
+    .video-play-ring {
+      width: 72px;
+      height: 72px;
+      border-radius: 50%;
+      border: 2px solid var(--gold);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 1rem;
+      transition: transform 0.3s, border-color 0.3s;
+    }
+    .video-overlay:hover .video-play-ring {
+      transform: scale(1.08);
+      border-color: var(--gold-light);
+    }
+    .video-play-triangle {
+      width: 0; height: 0;
+      border-style: solid;
+      border-width: 14px 0 14px 24px;
+      border-color: transparent transparent transparent var(--gold);
+      margin-left: 4px;
+    }
+    .video-play-label {
+      font-family: var(--font-heading);
+      font-weight: 600;
+      font-size: 1.1rem;
+      color: #F0EBE0;
+      letter-spacing: 0.08em;
+    }
+    .video-separator {
+      width: 80%;
+      max-width: 600px;
+      height: 1px;
+      background: linear-gradient(90deg, transparent 0%, var(--gold) 30%, var(--gold) 70%, transparent 100%);
+      opacity: 0.3;
+      margin: 3rem auto 0;
+    }
+
+    @media (max-width: 768px) {
+      .video-hero { padding: 0 1rem 2rem; }
+      .video-hero-nav { padding: 1rem; }
+      .video-container { width: 95vw; }
     }
 
     /* Top bar */
@@ -325,6 +445,47 @@
 </head>
 <body>
   <div class="accent-bar"></div>
+
+  <!-- Video Hero Section -->
+  <div class="video-hero">
+    <nav class="video-hero-nav">
+      <a href="index.html" class="nav-brand">Raise the Crown</a>
+      <a href="index.html">&larr; Back to Workshop</a>
+    </nav>
+
+    <h1>Office Hours with Brother Du Bois</h1>
+    <p class="intro-line">Before you begin, Brother Du Bois has something to say.</p>
+
+    <div class="video-container">
+      <video id="dubois-video" preload="metadata"
+        src="https://github.com/JBLiving06/fishygrits/releases/download/office-hours-v1/office_hours_dubois_intro_1080p.mp4">
+      </video>
+      <div class="video-overlay" id="video-overlay" onclick="playIntroVideo()">
+        <div class="video-play-ring">
+          <div class="video-play-triangle"></div>
+        </div>
+        <span class="video-play-label">Meet Brother Du Bois</span>
+      </div>
+    </div>
+
+    <div class="video-separator"></div>
+  </div>
+
+  <script>
+    function playIntroVideo() {
+      const video = document.getElementById('dubois-video');
+      const overlay = document.getElementById('video-overlay');
+      overlay.classList.add('hidden');
+      video.controls = true;
+      video.play();
+    }
+    document.getElementById('dubois-video').addEventListener('ended', function() {
+      this.controls = false;
+      document.getElementById('video-overlay').classList.remove('hidden');
+      document.getElementById('video-overlay').querySelector('.video-play-label').textContent = 'Watch Again';
+    });
+  </script>
+
   <div id="root"></div>
 
   <script crossorigin src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
