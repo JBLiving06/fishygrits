@@ -82,6 +82,7 @@
     }
     .video-container {
       position: relative;
+      max-width: 100%;
       max-height: 35vh;
       margin: 0 auto;
       display: inline-block;
@@ -92,8 +93,9 @@
       box-shadow: 0 8px 32px rgba(0,0,0,0.6);
     }
     .video-container video {
+      max-width: 100%;
       max-height: 35vh;
-      width: auto;
+      height: auto;
       object-fit: contain;
       display: block;
     }
@@ -151,8 +153,8 @@
     @media (max-width: 768px) {
       .video-hero { padding: 0 1rem 0.25rem; }
       .video-hero-nav { padding: 0.5rem 1rem; }
-      .video-container { max-height: 30vh; }
-      .video-container video { max-height: 30vh; }
+      .video-container { max-width: 100%; max-height: 50vh; }
+      .video-container video { max-width: 100%; max-height: 50vh; height: auto; }
     }
 
     /* Top bar */
@@ -457,7 +459,7 @@
     <p class="intro-line">Before you begin, Brother Du Bois has something to say.</p>
 
     <div class="video-container">
-      <video id="dubois-video" preload="metadata"
+      <video id="dubois-video" preload="metadata" playsinline controls
         src="https://github.com/JBLiving06/fishygrits/releases/download/office-hours-v1/office_hours_dubois_intro_1080p.mp4">
       </video>
       <div class="video-overlay" id="video-overlay" onclick="playIntroVideo()">
