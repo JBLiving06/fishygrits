@@ -1094,8 +1094,8 @@ function startBgMusic() {
   musicStarted = true;
   bgMusic.play().then(function() {
     var fadeIn = setInterval(function() {
-      if (bgMusic.volume < 0.15) {
-        bgMusic.volume = Math.min(bgMusic.volume + 0.01, 0.15);
+      if (bgMusic.volume < 0.025) {
+        bgMusic.volume = Math.min(bgMusic.volume + 0.002, 0.025);
       } else {
         clearInterval(fadeIn);
       }
