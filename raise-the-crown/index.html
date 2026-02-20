@@ -140,10 +140,10 @@ body {
   font-family: 'Source Serif 4', serif;
   font-weight: 300;
   font-style: italic;
-  font-size: clamp(1.1rem, 2.2vw, 1.4rem);
+  font-size: clamp(1.15rem, 2.4vw, 1.35rem);
   color: #F0EBE0;
   text-align: center;
-  max-width: 540px;
+  max-width: 600px;
   line-height: 1.7;
   margin-bottom: clamp(1.5rem, 3vh, 2.5rem);
   text-shadow: 0 2px 20px rgba(0,0,0,0.8), 0 1px 4px rgba(0,0,0,0.9);
@@ -761,6 +761,7 @@ body {
   <div class="nav-links">
     <a href="#story">The Story</a>
     <a href="office-hours.html">Office Hours</a>
+    <a href="#tool-ecosystem">Tool Ecosystem</a>
   </div>
 </nav>
 
@@ -768,7 +769,7 @@ body {
 <section class="hero">
   <div class="hero-content">
     <h1 class="hero-title">Raise the Crown</h1>
-    <p class="hero-subtitle">An AI literacy workshop for brilliant students who aren&rsquo;t using the greatest tool ever made to its fullest potential.</p>
+    <p class="hero-subtitle">How to use AI as your thinking partner, not just your souped-up search engine</p>
 
     <!-- Video Player -->
     <div class="video-container" id="videoContainer">
@@ -885,7 +886,7 @@ body {
     </div>
 
     <!-- Tool Ecosystem -->
-    <div class="tools-section fade-in">
+    <div class="tools-section fade-in" id="tool-ecosystem">
       <h2 class="section-header">The Tool Ecosystem</h2>
       <p class="section-timestamp">Last updated: February 2026</p>
       <p class="section-intro">Every tool below has a free tier or a student discount. The gap between free and paid is narrowing fast.</p>
@@ -1001,6 +1002,11 @@ body {
   </div>
 </section>
 
+<!-- Background Music -->
+<audio id="bgMusic" loop preload="auto">
+  <source src="assets/background-music.mp3" type="audio/mpeg">
+</audio>
+
 <!-- Footer -->
 <footer class="footer">
   <p>Raise the Crown &middot; February 2026 &middot; Jeff Livingston</p>
@@ -1076,6 +1082,31 @@ const observer = new IntersectionObserver(function(entries) {
   });
 }, { threshold: 0.1 });
 fadeEls.forEach(function(el) { observer.observe(el); });
+
+// ========== BACKGROUND MUSIC ==========
+var bgMusic = document.getElementById("bgMusic");
+bgMusic.volume = 0;
+var musicStarted = false;
+var musicMuted = false;
+
+function startBgMusic() {
+  if (musicStarted) return;
+  musicStarted = true;
+  bgMusic.play().then(function() {
+    var fadeIn = setInterval(function() {
+      if (bgMusic.volume < 0.15) {
+        bgMusic.volume = Math.min(bgMusic.volume + 0.01, 0.15);
+      } else {
+        clearInterval(fadeIn);
+      }
+    }, 100);
+  }).catch(function() { musicStarted = false; });
+  document.removeEventListener("click", startBgMusic);
+  document.removeEventListener("scroll", startBgMusic);
+}
+
+document.addEventListener("click", startBgMusic);
+document.addEventListener("scroll", startBgMusic);
 </script>
 </body>
 </html>
