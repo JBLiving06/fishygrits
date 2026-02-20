@@ -773,7 +773,7 @@ body {
 
     <!-- Video Player -->
     <div class="video-container" id="videoContainer">
-      <video id="workshopVideo" preload="metadata" playsinline>
+      <video id="workshopVideo" preload="metadata" playsinline controls>
         <source src="https://github.com/JBLiving06/fishygrits/releases/download/raise-the-crown-v1/Raise_the_Crown_Module_1_Complete.mp4" type="video/mp4">
       </video>
       <div class="play-overlay" id="playOverlay" onclick="startPlayback()">
@@ -1083,30 +1083,38 @@ const observer = new IntersectionObserver(function(entries) {
 }, { threshold: 0.1 });
 fadeEls.forEach(function(el) { observer.observe(el); });
 
-// ========== BACKGROUND MUSIC ==========
+// ========== BACKGROUND MUSIC (plays during video only) ==========
 var bgMusic = document.getElementById("bgMusic");
-bgMusic.volume = 0;
-var musicStarted = false;
-var musicMuted = false;
+bgMusic.volume = 0.025;
 
-function startBgMusic() {
-  if (musicStarted) return;
-  musicStarted = true;
-  bgMusic.play().then(function() {
-    var fadeIn = setInterval(function() {
-      if (bgMusic.volume < 0.025) {
-        bgMusic.volume = Math.min(bgMusic.volume + 0.002, 0.025);
-      } else {
-        clearInterval(fadeIn);
-      }
-    }, 100);
-  }).catch(function() { musicStarted = false; });
-  document.removeEventListener("click", startBgMusic);
-  document.removeEventListener("scroll", startBgMusic);
+function fadeMusic(targetVol, step, interval) {
+  var dir = targetVol > bgMusic.volume ? 1 : -1;
+  var fade = setInterval(function() {
+    var next = bgMusic.volume + dir * step;
+    if ((dir > 0 && next >= targetVol) || (dir < 0 && next <= targetVol)) {
+      bgMusic.volume = targetVol;
+      clearInterval(fade);
+      if (targetVol === 0) bgMusic.pause();
+    } else {
+      bgMusic.volume = next;
+    }
+  }, interval);
 }
 
-document.addEventListener("click", startBgMusic);
-document.addEventListener("scroll", startBgMusic);
+video.addEventListener("play", function() {
+  bgMusic.volume = 0;
+  bgMusic.play().then(function() {
+    fadeMusic(0.025, 0.002, 100);
+  }).catch(function() {});
+});
+
+video.addEventListener("pause", function() {
+  if (!video.ended) fadeMusic(0, 0.002, 80);
+});
+
+video.addEventListener("ended", function() {
+  fadeMusic(0, 0.003, 60);
+});
 </script>
 </body>
 </html>
