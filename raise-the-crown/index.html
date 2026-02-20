@@ -1102,6 +1102,7 @@ function fadeMusic(targetVol, step, interval) {
 }
 
 video.addEventListener("play", function() {
+  bgMusic.currentTime = 10;
   bgMusic.volume = 0;
   bgMusic.play().then(function() {
     fadeMusic(0.025, 0.002, 100);
